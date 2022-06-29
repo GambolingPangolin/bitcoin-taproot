@@ -1,8 +1,12 @@
-let nixpkgs = import (builtins.fetchTarball {
-      name = "nixos-unstable";
-      url = "https://github.com/nixos/nixpkgs/archive/4789953e5c1ef6d10e3ff437e5b7ab8eed526942.tar.gz";
-      sha256 = "15nksgi9pncz59l8vrfg05g9dqw835wwdi9bmghffyg0k1yh2j8d";
-    }) {};
+let
+  noStrip = next: current: {
+    secp256k1 = current.secp256k1.overrideAttrs
+      (_: {
+        version = "rotibula";
+        # dontStrip = true;
+      });
+  };
+  nixpkgs = import <nixpkgs> { overlays = [ noStrip ]; };
 in
 
 with nixpkgs.pkgs; mkShell {
@@ -12,5 +16,6 @@ with nixpkgs.pkgs; mkShell {
     gmp
     pkg-config
     secp256k1
+    gdb
   ];
 }

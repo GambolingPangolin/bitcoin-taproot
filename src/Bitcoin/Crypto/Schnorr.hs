@@ -19,8 +19,9 @@ import Data.ByteString.Unsafe (
     unsafeUseAsCString,
     unsafeUseAsCStringLen,
  )
+import qualified Data.Serialize as S
 import Foreign (allocaBytes, free, mallocBytes, nullPtr)
-import Haskoin (Msg, PubKey, SecKey, exportPubKey, getMsg, getSecKey)
+import Haskoin (Msg, PubKey, SecKey, getMsg, getSecKey)
 import System.IO.Unsafe (unsafePerformIO)
 
 -- | TODO serialization
@@ -61,9 +62,9 @@ verify ::
     Bip340Sig ->
     Bool
 verify pubKey message sig = unsafePerformIO $
-    unsafeUseAsCString (exportPubKey False pubKey) $ \pubKeyPtr ->
+    unsafeUseAsCString (S.encode pubKey) $ \pubKeyPtr ->
         allocaBytes 32 $ \xOnlyPubKeyPtr -> do
-            _ <- xOnlyPubKeyFromPubKey context xOnlyPubKeyPtr nullPtr pubKeyPtr
+            _result <- xOnlyPubKeyFromPubKey context xOnlyPubKeyPtr nullPtr pubKeyPtr
             unsafeUseAsCStringLen (getMsg message) $ \(messageCStr, messageSize) ->
                 unsafeUseAsCString (unBip340Sig sig) $ \signatureCStr ->
                     (== 1)

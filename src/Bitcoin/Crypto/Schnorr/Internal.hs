@@ -20,7 +20,7 @@ context :: Ptr Context
 context = unsafePerformIO $ contextCreate 0x0301 -- sign & verify
 {-# NOINLINE context #-}
 
-foreign import ccall unsafe "secp256k1_schnorrsig.h secp256k1_schnorrsig_sign"
+foreign import ccall unsafe "secp256k1.h secp256k1_schnorrsig_sign"
     schnorrSign ::
         Ptr Context ->
         -- | Signature
@@ -33,7 +33,7 @@ foreign import ccall unsafe "secp256k1_schnorrsig.h secp256k1_schnorrsig_sign"
         CString ->
         IO CInt
 
-foreign import ccall unsafe "secp256k1_schnorrsig.h secp256k1_schnorrsig_verify"
+foreign import ccall unsafe "secp256k1.h secp256k1_schnorrsig_verify"
     schnorrVerify ::
         Ptr Context ->
         -- | Signature
@@ -46,7 +46,7 @@ foreign import ccall unsafe "secp256k1_schnorrsig.h secp256k1_schnorrsig_verify"
         CString ->
         IO CInt
 
-foreign import ccall unsafe "secp256k1_extrakeys.h secp256k1_keypair_create"
+foreign import ccall unsafe "secp256k1.h secp256k1_keypair_create"
     keyPairCreate ::
         Ptr Context ->
         -- | Keypair
@@ -55,7 +55,7 @@ foreign import ccall unsafe "secp256k1_extrakeys.h secp256k1_keypair_create"
         CString ->
         IO CInt
 
-foreign import ccall unsafe "secp256k1_extrakeys.h secp256k1_xonly_pubkey_from_pubkey"
+foreign import ccall unsafe "secp256k1.h secp256k1_xonly_pubkey_from_pubkey"
     xOnlyPubKeyFromPubKey ::
         Ptr Context ->
         -- | X-only pubkey
